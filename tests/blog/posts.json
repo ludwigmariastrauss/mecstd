@@ -1,0 +1,20 @@
+[
+  {
+    "id": "001",
+    "title": "Willkommen auf unserem Blog",
+    "author": "Admin",
+    "date": "2026-05-16",
+    "tags": ["allgemein"],
+    "excerpt": "Herzlich willkommen auf unserem Blog. Hier teilen wir Wissen, Erfahrungen und Gedanken rund um IT und Produktion.",
+    "content": "Herzlich willkommen auf unserem Blog!\n\nHier teilen wir Wissen, Erfahrungen und Gedanken rund um IT und Produktion. Sowohl Teammitglieder als auch Gäste sind eingeladen, Beiträge einzureichen.\n\nUm einen Gastbeitrag einzureichen, klicke einfach auf \"Gastbeitrag einreichen\" – wir prüfen deinen Beitrag und veröffentlichen ihn nach Freigabe."
+  },
+  {
+    "id": "002",
+    "title": "IT-Infrastruktur in der Produktion",
+    "author": "Admin",
+    "date": "2026-05-16",
+    "tags": ["IT", "Produktion"],
+    "excerpt": "Moderne Produktionsanlagen stellen hohe Anforderungen an die IT-Infrastruktur. Ein Überblick über bewährte Ansätze.",
+    "content": "Moderne Produktionsanlagen stellen hohe Anforderungen an die IT-Infrastruktur.\n\n## Herausforderungen\n\nVon OT/IT-Integration über Echtzeit-Monitoring bis hin zu Ausfallsicherheit – die Anforderungen sind vielfältig und komplex.\n\n## Bewährte Ansätze\n\n- Segmentierte Netzwerkarchitektur (IT/OT-Trennung)\n- Redundante Systeme für kritische Prozesse\n- Zentrale Überwachung und Alerting\n- Klare Eskalationsprozesse\n\nWelche Herausforderungen kennt ihr aus eurer Praxis? Schreibt einen Gastbeitrag!"
+  }
+]

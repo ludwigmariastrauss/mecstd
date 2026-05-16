@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post – Blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0e0e0e;
+      --surface: #161616;
+      --border: #2a2a2a;
+      --text: #e8e8e8;
+      --muted: #6b6b6b;
+      --accent: #00e5a0;
+      --accent-dim: rgba(0,229,160,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      min-height: 100vh;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 0 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      position: sticky;
+      top: 0;
+      background: rgba(14,14,14,0.95);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+    .logo {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+    .logo span { color: var(--muted); font-weight: 400; }
+    nav { display: flex; align-items: center; gap: 2rem; }
+    nav a {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--text); }
+    .back-link {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+      margin-bottom: 2.5rem;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    .post-wrapper {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 2.5rem 6rem;
+    }
+    .post-meta-row {
+      display: flex;
+      gap: 1.5rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      margin-bottom: 1.5rem;
+    }
+    .post-tags {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(0,229,160,0.2);
+      padding: 0.15rem 0.5rem;
+      border-radius: 2px;
+      letter-spacing: 0.05em;
+    }
+    h1 {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 2.5rem;
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+    .post-content {
+      font-size: 1rem;
+      color: #c8c8c8;
+      line-height: 1.9;
+    }
+    .post-content p { margin-bottom: 1.4rem; }
+    .post-content h2 {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5rem 0 0.8rem;
+      letter-spacing: 0.02em;
+    }
+    .post-content h2::before { content: '## '; color: var(--accent); }
+    .post-content ul, .post-content ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.4rem;
+    }
+    .post-content li { margin-bottom: 0.4rem; }
+    .post-content code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85em;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.15em 0.45em;
+      border-radius: 2px;
+      color: var(--accent);
+    }
+
+    /* AUTHOR BOX */
+    .author-box {
+      margin-top: 3.5rem;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      padding: 1.5rem;
+      border-radius: 2px;
+    }
+    .author-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.3rem;
+    }
+    .author-name {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* CTA */
+    .cta-section {
+      margin-top: 4rem;
+      padding: 2rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 2px;
+      text-align: center;
+    }
+    .cta-section p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .cta-btn {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0.6rem 1.4rem;
+      border-radius: 2px;
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: background 0.2s, color 0.2s;
+    }
+    .cta-btn:hover { background: var(--accent); color: #000; }
+
+    /* ERROR */
+    .error {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--muted);
+      padding: 4rem 0;
+    }
+    .error::before { content: '> '; color: var(--accent); }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.8rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    footer p {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      header { padding: 0 1.2rem; }
+      .post-wrapper { padding: 2.5rem 1.2rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">blog<span>.sys</span></a>
+  <nav>
+    <a href="index.html">Posts</a>
+    <a href="submit.html">+ Gastbeitrag</a>
+  </nav>
+</header>
+
+<main class="post-wrapper" id="post-wrapper">
+  <p class="error">Beitrag wird geladen</p>
+</main>
+
+<footer>
+  <p>© 2026 Blog</p>
+  <p><a href="index.html">← Zurück zur Übersicht</a></p>
+</footer>
+
+<script>
+  function getParam(name) {
+    return new URLSearchParams(window.location.search).get(name);
+  }
+  function formatDate(d) {
+    return new Date(d).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  }
+
+  // Simple markdown-ish parser
+  function renderContent(text) {
+    const lines = text.split('\n');
+    let html = '';
+    let inList = false;
+    for (let line of lines) {
+      if (line.startsWith('## ')) {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += `<h2>${line.slice(3)}</h2>`;
+      } else if (line.startsWith('- ')) {
+        if (!inList) { html += '<ul>'; inList = true; }
+        html += `<li>${line.slice(2)}</li>`;
+      } else {
+        if (inList) { html += '</ul>'; inList = false; }
+        if (line.trim()) html += `<p>${line}</p>`;
+      }
+    }
+    if (inList) html += '</ul>';
+    return html;
+  }
+
+  async function loadPost() {
+    const id = getParam('id');
+    const wrapper = document.getElementById('post-wrapper');
+    if (!id) {
+      wrapper.innerHTML = '<p class="error">Kein Beitrag ausgewählt.</p>';
+      return;
+    }
+    try {
+      const res = await fetch('posts.json');
+      const posts = await res.json();
+      const post = posts.find(p => p.id === id);
+      if (!post) {
+        wrapper.innerHTML = '<p class="error">Beitrag nicht gefunden.</p>';
+        return;
+      }
+      document.title = `${post.title} – Blog`;
+      wrapper.innerHTML = `
+        <a href="index.html" class="back-link">← Alle Beiträge</a>
+        <div class="post-meta-row">
+          <span>${formatDate(post.date)}</span>
+          <span>${post.author}</span>
+        </div>
+        <div class="post-tags">
+          ${(post.tags || []).map(t => `<span class="tag">${t}</span>`).join('')}
+        </div>
+        <hr class="divider">
+        <h1>${post.title}</h1>
+        <div class="post-content">${renderContent(post.content)}</div>
+        <div class="author-box">
+          <div class="author-label">AUTOR</div>
+          <div class="author-name">${post.author}</div>
+        </div>
+        <div class="cta-section">
+          <p>Hast du auch etwas beizutragen? Schreib einen Gastbeitrag!</p>
+          <a href="submit.html" class="cta-btn">+ Gastbeitrag einreichen</a>
+        </div>
+      `;
+    } catch (e) {
+      wrapper.innerHTML = '<p class="error">Fehler beim Laden des Beitrags.</p>';
+    }
+  }
+
+  loadPost();
+</script>
+</body>
+</html>

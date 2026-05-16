@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0e0e0e;
+      --surface: #161616;
+      --border: #2a2a2a;
+      --text: #e8e8e8;
+      --muted: #6b6b6b;
+      --accent: #00e5a0;
+      --accent-dim: rgba(0,229,160,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 15px; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 0 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      position: sticky;
+      top: 0;
+      background: rgba(14,14,14,0.95);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+    .logo {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+    .logo span { color: var(--muted); font-weight: 400; }
+    nav { display: flex; align-items: center; gap: 2rem; }
+    nav a {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--text); }
+    .btn-submit {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--accent) !important;
+      border: 1px solid var(--accent);
+      padding: 0.35rem 0.9rem;
+      border-radius: 2px;
+      letter-spacing: 0.06em;
+      transition: background 0.2s, color 0.2s !important;
+    }
+    .btn-submit:hover {
+      background: var(--accent) !important;
+      color: #000 !important;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 5rem 2.5rem 3.5rem;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .hero-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .hero-label::before { content: '// '; color: var(--accent); }
+    h1 {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.2rem;
+    }
+    .hero p {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.8;
+    }
+
+    /* FILTER BAR */
+    .filter-bar {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2.5rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .filter-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      margin-right: 0.5rem;
+    }
+    .tag-btn {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0.25rem 0.7rem;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.04em;
+    }
+    .tag-btn:hover, .tag-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    /* DIVIDER */
+    .section-divider {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2.5rem;
+      border-top: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+
+    /* POST LIST */
+    #post-list {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2.5rem 5rem;
+    }
+    .post-item {
+      border-bottom: 1px solid var(--border);
+      padding: 2.2rem 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.5rem;
+      align-items: start;
+      cursor: pointer;
+      transition: background 0.15s;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+    }
+    .post-item::before {
+      content: '';
+      position: absolute;
+      left: -2.5rem;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .post-item:hover::before { opacity: 1; }
+    .post-item:hover .post-title { color: var(--accent); }
+    .post-meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.6rem;
+      display: flex;
+      gap: 1.2rem;
+    }
+    .post-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1.05rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.6rem;
+      transition: color 0.2s;
+      line-height: 1.35;
+    }
+    .post-excerpt {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 560px;
+    }
+    .post-tags {
+      display: flex;
+      gap: 0.4rem;
+      margin-top: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(0,229,160,0.2);
+      padding: 0.15rem 0.5rem;
+      border-radius: 2px;
+      letter-spacing: 0.05em;
+    }
+    .post-arrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      padding-top: 2.5rem;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .post-item:hover .post-arrow {
+      color: var(--accent);
+      transform: translateX(4px);
+    }
+
+    /* EMPTY */
+    .empty {
+      padding: 4rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .empty::before { content: '> '; color: var(--accent); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.8rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer p {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* LOADING */
+    .loading {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+      padding: 4rem 0;
+    }
+    .loading::after {
+      content: '';
+      display: inline-block;
+      width: 6px; height: 12px;
+      background: var(--accent);
+      margin-left: 6px;
+      animation: blink 1s infinite;
+      vertical-align: middle;
+    }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+    @media (max-width: 600px) {
+      header { padding: 0 1.2rem; }
+      .hero, .filter-bar, #post-list, .section-divider { padding-left: 1.2rem; padding-right: 1.2rem; }
+      .post-item::before { left: -1.2rem; }
+      footer { flex-direction: column; gap: 0.8rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">blog<span>.sys</span></a>
+  <nav>
+    <a href="index.html">Posts</a>
+    <a href="submit.html" class="btn-submit">+ Gastbeitrag</a>
+  </nav>
+</header>
+
+<main>
+  <div class="hero">
+    <p class="hero-label">Aktuelle Beiträge</p>
+    <h1>Blog</h1>
+    <p>Wissen, Erfahrungen und Gedanken rund um IT und Produktion — von Teammitgliedern und Gästen.</p>
+  </div>
+
+  <div class="filter-bar" id="filter-bar">
+    <span class="filter-label">filter:</span>
+    <button class="tag-btn active" data-tag="all">alle</button>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <div id="post-list">
+    <p class="loading">Beiträge laden</p>
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 Blog — Static on GitHub Pages</p>
+  <p><a href="submit.html">Gastbeitrag einreichen</a></p>
+</footer>
+
+<script>
+  let allPosts = [];
+  let activeTag = 'all';
+
+  async function loadPosts() {
+    try {
+      const res = await fetch('posts.json');
+      allPosts = await res.json();
+      allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+      buildFilters();
+      renderPosts();
+    } catch (e) {
+      document.getElementById('post-list').innerHTML =
+        '<p class="empty">Keine Beiträge gefunden.</p>';
+    }
+  }
+
+  function buildFilters() {
+    const tags = new Set();
+    allPosts.forEach(p => (p.tags || []).forEach(t => tags.add(t)));
+    const bar = document.getElementById('filter-bar');
+    tags.forEach(tag => {
+      const btn = document.createElement('button');
+      btn.className = 'tag-btn';
+      btn.dataset.tag = tag;
+      btn.textContent = tag;
+      btn.addEventListener('click', () => setFilter(tag));
+      bar.appendChild(btn);
+    });
+    bar.querySelector('[data-tag="all"]').addEventListener('click', () => setFilter('all'));
+  }
+
+  function setFilter(tag) {
+    activeTag = tag;
+    document.querySelectorAll('.tag-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.tag === tag);
+    });
+    renderPosts();
+  }
+
+  function renderPosts() {
+    const list = document.getElementById('post-list');
+    const filtered = activeTag === 'all'
+      ? allPosts
+      : allPosts.filter(p => (p.tags || []).includes(activeTag));
+
+    if (!filtered.length) {
+      list.innerHTML = '<p class="empty">Keine Beiträge für diesen Filter.</p>';
+      return;
+    }
+
+    list.innerHTML = filtered.map(post => `
+      <a class="post-item" href="post.html?id=${post.id}">
+        <div>
+          <div class="post-meta">
+            <span>${formatDate(post.date)}</span>
+            <span>${post.author}</span>
+          </div>
+          <div class="post-title">${post.title}</div>
+          <div class="post-excerpt">${post.excerpt}</div>
+          <div class="post-tags">
+            ${(post.tags || []).map(t => `<span class="tag">${t}</span>`).join('')}
+          </div>
+        </div>
+        <span class="post-arrow">→</span>
+      </a>
+    `).join('');
+  }
+
+  function formatDate(d) {
+    return new Date(d).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  }
+
+  loadPosts();
+</script>
+</body>
+</html>
